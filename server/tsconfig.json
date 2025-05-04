@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "module": "CommonJS",      // Important: Use CommonJS
+      "target": "ES2020",
+      "esModuleInterop": true,   // Allows default import-style behavior with require
+      "strict": true,
+      "moduleResolution": "Node",
+      "skipLibCheck": true
+    }
+  }
