@@ -21,8 +21,8 @@ const jobs: Job[] = [
   {
     id: 1,
     name: "Frontend Engineer",
-    company: "Tech Corp",
-    location: "Stockholm",
+    company: "Meta",
+    location: "London",
     description: "Work on our modern React stack...",
     salaryRange: [50000, 70000],
     datePosted: new Date("2025-06-01"),
@@ -37,7 +37,7 @@ const jobs: Job[] = [
     datePosted: new Date("2025-04-15"),
   },
   {
-    id: 2,
+    id: 3,
     name: "Teacher",
     company: "Balderskolan",
     location: "Skellefteå",

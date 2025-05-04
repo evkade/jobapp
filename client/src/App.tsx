@@ -1,13 +1,28 @@
 import { useEffect, useState } from 'react';
 import { Job } from '../../shared/job.type'; 
+import Header from './components/Header';
+import JobList from './components/JobList';
+import Loading from './components/Loading';
+
+import styled from 'styled-components';
+import JobInput from './components/JobInput';
+import NewJobModal from './components/NewJobModal';
+
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px
+`;
 
 function App() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:3001/jobs')
-      .then((res) => res.json()) // Parse the JSON response
+      .then((res) => res.json()) // parse the JSON response
       .then((data) => {
         setJobs(data.jobs);
         setLoading(false);
@@ -19,22 +34,16 @@ function App() {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
-  if (jobs === undefined || jobs === null) {
-    return <div> Jobs is null. </div>
-  };
-
   return (
-    <div>
-      <h1>List of Items:</h1>
-        {jobs.length === 0 && <p> No items found. </p>}
-        {jobs.map((job) => {
-          console.log(job);
-          return (<div key={job.id}>{job.name}</div>)
-        })}
-    </div>
+    <AppContainer>
+      <Header/>
+      <JobList jobs={jobs}/>
+      <JobInput setShowModal={setShowModal} />
+      <NewJobModal isShown={showModal} setIsShown={setShowModal} setJobs={setJobs} />
+    </AppContainer>
   );
 }
 
