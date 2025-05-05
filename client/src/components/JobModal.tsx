@@ -51,16 +51,33 @@ function JobDetailsModal(props : {
       return null;
     }
 
-    function addJobCallback(currentJob: Job) {
-        const maxId = jobs.length > 0 ? Math.max(...jobs.map(j => j.id)) : 0;
-        const nextId = maxId + 1;
-        const now = new Date();
-        const jobWithMetadata = { ...currentJob, id: nextId, datePosted: now };
-        setJobs([...jobs, jobWithMetadata]); 
-        postNewJob(jobWithMetadata);
-        setIsShown(false);
-        setJobForUpdate(draftNewJob);
-    } 
+  function addJob(job: Job) {
+      const maxId = jobs.length > 0 ? Math.max(...jobs.map(j => j.id)) : 0;
+      const nextId = maxId + 1;
+      const now = new Date();
+      const jobWithMetadata = { ...job, id: nextId, datePosted: now };
+      fetch('http://localhost:3001/newJob', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({job: job}),
+      }).then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to post job");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log("Successfully posted job:", data);
+          setJobs([...jobs, jobWithMetadata]); 
+          setIsShown(false);
+          setJobForUpdate(draftNewJob);
+        })
+        .catch((error) => {
+          console.error("Error posting job:", error);
+        });
+  }
 
     function updateJob(job: Job) {
       fetch(`http://localhost:3001/jobs/${job.id}`, {
@@ -72,15 +89,16 @@ function JobDetailsModal(props : {
         })
         .then(response => response.json())
         .then((data) => {
-          setIsShown(false);
           setJobs(data.jobs);
+          setIsShown(false);
+          setJobForUpdate(draftNewJob);
         })
         .catch(error => console.error('Error:', error));
     }
 
     function callback(job: Job) {
       if(modalType === JobModalType.Create) {
-        return addJobCallback(job);
+        return addJob(job);
       }
       else {
         return updateJob(job);
@@ -102,26 +120,4 @@ function JobDetailsModal(props : {
 }
 
 export default JobDetailsModal;
-
-function postNewJob(currentJob: Job) {
-    fetch('http://localhost:3001/newJob', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({job: currentJob}),
-    }).then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to post job");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Successfully posted job:", data);
-        // Optionally update state or refetch jobs
-      })
-      .catch((error) => {
-        console.error("Error posting job:", error);
-      });
-}
 
