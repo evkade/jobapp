@@ -5,14 +5,14 @@ import JobList from './components/JobList';
 import Loading from './components/Loading';
 
 import styled from 'styled-components';
-import JobInput from './components/JobInput';
 import NewJobModal from './components/NewJobModal';
+import StyledButton from './library/StyledButton';
 
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px
+  gap: 50px
 `;
 
 function App() {
@@ -40,9 +40,9 @@ function App() {
   return (
     <AppContainer>
       <Header/>
-      <JobList jobs={jobs}/>
-      <JobInput setShowModal={setShowModal} />
-      <NewJobModal isShown={showModal} setIsShown={setShowModal} setJobs={setJobs} />
+      <JobList jobs={jobs} setJobs={setJobs}/>
+      <StyledButton onClick={() => setShowModal(true)}> Add job </StyledButton>
+      <NewJobModal isShown={showModal} setIsShown={setShowModal} jobs={jobs} setJobs={setJobs} />
     </AppContainer>
   );
 }

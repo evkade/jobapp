@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Job } from "../../../shared/job.type";
+import StyledButton from "../library/StyledButton";
 
 const JobEntryContainer = styled.div`
     display: flex;
@@ -16,14 +17,15 @@ const StyledJobDetail = styled.p`
 `;
 
 function JobEntry(
-    props : { job : Job }
+    props : { job : Job , deleteJob: (job: Job) => void}
 ) {
-    const { job } = props;
+    const { job, deleteJob } = props;
     return (
         <JobEntryContainer >
             <StyledJobName>{job.name}</StyledJobName>
             <StyledJobDetail>{job.company}</StyledJobDetail>
             <StyledJobDetail>{job.location}</StyledJobDetail>
+            <StyledButton onClick={() => deleteJob(job)} bgColor='#f5d3f3' hoverColor="#dab6d8" height="25px" width="60px" fontSize="14px"> Delete </StyledButton>
         </JobEntryContainer>
     )
 }

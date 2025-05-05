@@ -20,11 +20,14 @@ const StyledInput = styled.input`
 function TextInput(props: {
     label: string;
     value: string;
+    setValue: (value: string) => void;
 }) {
+    const {label, value, setValue} = props;
+
     return (
         <TextInputContainer>
-            <StyledLabel> {props.label} </StyledLabel> 
-            <StyledInput/>
+            <StyledLabel> {label} </StyledLabel> 
+            <StyledInput value={value} onChange={e => setValue(e.target.value)}/> 
         </TextInputContainer>
     )
 }

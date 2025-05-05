@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Job } from "../../../shared/job.type";
-import Button from "../library/Button";
 import { useState } from "react";
 import TextInput from "../library/TextInput";
+import StyledButton from "../library/StyledButton";
 
 const StyledModal = styled.div`
     background-color: white; // american spelling
@@ -30,39 +30,77 @@ const ButtonContainer = styled.div`
     margin: 0 0 20px 0;
 `;
 
+const draftNewJob = {
+    id: -1,
+    name: "",
+    company: "",
+    location: "",
+    description: "",
+    salaryRange: [0, 0] as [number, number],
+    datePosted: new Date("1998-06-19"),
+};
+
 function NewJobModal(props : { 
     isShown: boolean; 
     setIsShown: (isShown: boolean) => void;
-    setJobs: (jobs: Job[]) => void 
+    jobs: Job[];
+    setJobs: (jobs: Job[]) => void;
 }) {
-    const { isShown, setIsShown, setJobs } = props;
+    const { isShown, setIsShown, jobs, setJobs } = props;
 
-    const[newJob, setNewJob] = useState({
-        id: -1,
-        name: "",
-        company: "",
-        location: "",
-        description: "",
-        salaryRange: [0, 0],
-        datePosted: new Date("1998-06-19"),
-      })
+    const[newJob, setNewJob] = useState(draftNewJob);
 
     if (!isShown) {
         return null;
     }
 
+    function addJobCallback(newJob: Job) {
+        // Create correct metadata for the job 
+        const maxId = jobs.length > 0 ? Math.max(...jobs.map(j => j.id)) : 0;
+        const nextId = maxId + 1;
+        const now = new Date();
+        const jobWithMetadata = { ...newJob, id: nextId, datePosted: now };
+        setNewJob(jobWithMetadata); // probably not needed at this point
+        setJobs([...jobs, jobWithMetadata]); 
+        postNewJob(jobWithMetadata);
+        setIsShown(false);
+        setNewJob(draftNewJob);
+    } 
+
     return (
         <StyledModal>
             <h1> Add new job </h1>
-            <TextInput label="Title" value={newJob.name}/>
-            <TextInput label="Company" value={newJob.company}/>
-            <TextInput label="Location" value={newJob.location}/>
+            <TextInput label="Title" value={newJob.name} setValue={(val) => setNewJob({ ...newJob, name: val })}/>
+            <TextInput label="Company" value={newJob.company} setValue={(val) => setNewJob({ ...newJob, company: val })}/>
+            <TextInput label="Location" value={newJob.location} setValue={(val) => setNewJob({ ...newJob, location: val })}/>
             <ButtonContainer>
-                <Button callback={() => setIsShown(false)} label="Cancel"/>
-                <Button callback={() => console.log('confirm')} label="Confirm"/>
+            <StyledButton onClick={() => setIsShown(false)} height="30px" width="70px" fontSize="14px">Cancel</StyledButton>
+            <StyledButton onClick={() => addJobCallback(newJob)} height="30px" width="70px" fontSize="14px">Confirm</StyledButton>
             </ButtonContainer>
         </StyledModal>
     )
 }
 
 export default NewJobModal;
+
+function postNewJob(newJob: Job) {
+    fetch('http://localhost:3001/newJob', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({job: newJob}),
+    }).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to post job");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Successfully posted job:", data);
+        // Optionally update state or refetch jobs
+      })
+      .catch((error) => {
+        console.error("Error posting job:", error);
+      });
+  }
