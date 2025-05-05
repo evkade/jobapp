@@ -22,7 +22,7 @@ function JobList(props : {
     function deleteJobCallback(jobToDelete: Job) {
         const updatedJobs = jobs.filter(job => job.id !== jobToDelete.id);
         setJobs(updatedJobs);
-        postDeleteJob(jobToDelete.id);
+        deleteJob(jobToDelete.id);
     }
 
     return (
@@ -34,25 +34,24 @@ function JobList(props : {
 
 export default JobList;
 
-function postDeleteJob(id: number) {
-    fetch('http://localhost:3001/deleteJob', {
-      method: 'POST',
+function deleteJob(id: number) {
+    fetch(`http://localhost:3001/jobs/${id}`, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({id: id}),
     }).then((res) => {
         if (!res.ok) {
-          throw new Error("Failed to post delete job");
+          throw new Error("Failed to delete job");
         }
         return res.json();
       })
       .then((data) => {
-        console.log("Successfully posted delete job:", data);
+        console.log("Successfully deleted job:", data);
         // Optionally update state or refetch jobs
       })
       .catch((error) => {
-        console.error("Error posting delete job:", error);
+        console.error("Error while deleting job:", error);
       });
   }
 

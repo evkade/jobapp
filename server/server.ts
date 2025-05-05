@@ -32,15 +32,18 @@ app.post('/newJob', (req: Request, res: Response) => {
     }
 });
 
-app.post('/deleteJob', (req: Request, res: Response) => {
-  const { id } = req.body;
-  if (id) {
-      console.log(jobs);
-      jobs = jobs.filter(job => job.id != id)
-      console.log(jobs);
+app.delete('/jobs/:id', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  if (!isNaN(id)) {
+    const initialLength = jobs.length;
+    jobs = jobs.filter(job => job.id !== id);
+    if (jobs.length < initialLength) {
       res.status(200).json({ message: 'Job deleted.', id });
+    } else {
+      res.status(404).json({ message: 'Job not found.', id });
+    }
   } else {
-      res.status(400).json({ message: 'Missing job data.' });
+    res.status(400).json({ message: 'Invalid job ID.' });
   }
 });
 
