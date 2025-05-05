@@ -25,6 +25,17 @@ const StyledModal = styled.div`
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%); // center
+  z-index: 1000; // must be above the overlay
+`;
+
+const StyledOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.1); // semi-transparent black
+  z-index: 999; // ensure it's above other content but below the modal
 `;
 
 const InputContainer = styled.div`
@@ -120,6 +131,8 @@ function JobDetailsModal(props: {
   }
 
   return (
+    <>
+    <StyledOverlay />
     <StyledModal>
       {modalType === JobModalType.Create ? (
         <h1> Add new job </h1>
@@ -164,6 +177,7 @@ function JobDetailsModal(props: {
         </StyledButton>
       </ButtonContainer>
     </StyledModal>
+    </>
   );
 }
 
