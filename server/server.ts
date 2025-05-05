@@ -1,64 +1,66 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 
-import { Job } from '../shared/job.type'; 
-import type { Request, Response } from 'express'; 
+import { Job } from "../shared/job.type";
+import type { Request, Response } from "express";
 // import bodyParser from 'body-parser';
 
 const app = express();
 const PORT = 3001;
 
 app.use(cors()); // need this to allow requests from client
-app.use(express.json()); // parse json 
+app.use(express.json()); // parse json
 
-app.get('/', (_req: Request, res: Response) => {
-    res.send('server is running!');
-  });
-
-app.get('/jobs', (req: Request, res: Response) => {
-    res.json({jobs: jobs});
+app.get("/", (_req: Request, res: Response) => {
+  res.send("server is running!");
 });
 
-app.post('/newJob', (req: Request, res: Response) => {
-    const { job } = req.body;
-    if (job) {
-        jobs.push(job);
-        res.status(200).json({ message: 'New job added.', job });
-    } else {
-        res.status(400).json({ message: 'Missing job data.' });
-    }
+app.get("/jobs", (req: Request, res: Response) => {
+  res.json({ jobs: jobs });
 });
 
-app.put('/jobs/:id', (req: Request, res: Response) => {
+app.post("/newJob", (req: Request, res: Response) => {
+  const { job } = req.body;
+  if (job) {
+    jobs.push(job);
+    res.status(200).json({ message: "New job added.", job });
+  } else {
+    res.status(400).json({ message: "Missing job data." });
+  }
+});
+
+app.put("/jobs/:id", (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const { job } = req.body;
 
   if (!job || !id) {
-    return res.status(400).json({ message: 'Missing job data or invalid ID.' });
+    return res.status(400).json({ message: "Missing job data or invalid ID." });
   }
 
-  const existingJobIndex = jobs.findIndex(existingJob => existingJob.id === id);
+  const existingJobIndex = jobs.findIndex(
+    (existingJob) => existingJob.id === id
+  );
   if (existingJobIndex === -1) {
-    return res.status(404).json({ message: 'Job not found.' });
+    return res.status(404).json({ message: "Job not found." });
   }
   const updatedJob = { ...jobs[existingJobIndex], ...job };
   jobs[existingJobIndex] = updatedJob;
 
-  res.status(200).json({ message: 'Job updated.', jobs: jobs });
+  res.status(200).json({ message: "Job updated.", jobs: jobs });
 });
 
-app.delete('/jobs/:id', (req: Request, res: Response) => {
+app.delete("/jobs/:id", (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   if (!isNaN(id)) {
     const initialLength = jobs.length;
-    jobs = jobs.filter(job => job.id !== id);
+    jobs = jobs.filter((job) => job.id !== id);
     if (jobs.length < initialLength) {
-      res.status(200).json({ message: 'Job deleted.', id });
+      res.status(200).json({ message: "Job deleted.", id });
     } else {
-      res.status(404).json({ message: 'Job not found.', id });
+      res.status(404).json({ message: "Job not found.", id });
     }
   } else {
-    res.status(400).json({ message: 'Invalid job ID.' });
+    res.status(400).json({ message: "Invalid job ID." });
   }
 });
 

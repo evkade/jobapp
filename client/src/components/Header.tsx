@@ -1,11 +1,11 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledHeader = styled.h1`
-    margin: 20px 0 0 0 // top right bottom left
+  margin: 20px 0 0 0; // top right bottom left
 `;
 
 function Header() {
-    return <StyledHeader>List of Jobs</StyledHeader>
+  return <StyledHeader>List of Jobs</StyledHeader>;
 }
 
 export default Header;
