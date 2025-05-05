@@ -8,7 +8,7 @@ import JobDetailsModal, { JobModalType } from "./JobModal";
 const JobListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 30px;
 `;
 
 export const draftNewJob = {

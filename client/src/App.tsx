@@ -12,7 +12,7 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
+  gap: 30px;
 `;
 
 function App() {

@@ -3,7 +3,6 @@ const cors = require("cors");
 
 import { Job } from "../shared/job.type";
 import type { Request, Response } from "express";
-// import bodyParser from 'body-parser';
 
 const app = express();
 const PORT = 3001;

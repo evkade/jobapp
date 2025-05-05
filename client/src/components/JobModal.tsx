@@ -11,7 +11,7 @@ export enum JobModalType {
 }
 
 const StyledModal = styled.div`
-  background-color: white; // american spelling
+  background-color: white;
   border: solid black 1px;
   border-radius: 20px; // rounded corners
   height: 500px;
@@ -20,12 +20,18 @@ const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
 
   position: fixed; // positioning is based on the window instead of its parent
-  top: 35%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%); // center
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0 50px 0 0;
 `;
 
 const ButtonContainer = styled.div`
@@ -33,7 +39,7 @@ const ButtonContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 80%; // need to have a width to be able to set space-between
-  margin: 0 0 20px 0;
+  margin: 200px 0 20px 0;
 `;
 
 function JobDetailsModal(props: {
@@ -120,21 +126,25 @@ function JobDetailsModal(props: {
       ) : (
         <h1> Update job </h1>
       )}
-      <TextInput
-        label="Title"
-        value={jobForUpdate.name}
-        setValue={(val) => setJobForUpdate({ ...jobForUpdate, name: val })}
-      />
-      <TextInput
-        label="Company"
-        value={jobForUpdate.company}
-        setValue={(val) => setJobForUpdate({ ...jobForUpdate, company: val })}
-      />
-      <TextInput
-        label="Location"
-        value={jobForUpdate.location}
-        setValue={(val) => setJobForUpdate({ ...jobForUpdate, location: val })}
-      />
+      <InputContainer>
+        <TextInput
+          label="Title"
+          value={jobForUpdate.name}
+          setValue={(val) => setJobForUpdate({ ...jobForUpdate, name: val })}
+        />
+        <TextInput
+          label="Company"
+          value={jobForUpdate.company}
+          setValue={(val) => setJobForUpdate({ ...jobForUpdate, company: val })}
+        />
+        <TextInput
+          label="Location"
+          value={jobForUpdate.location}
+          setValue={(val) =>
+            setJobForUpdate({ ...jobForUpdate, location: val })
+          }
+        />
+      </InputContainer>
       <ButtonContainer>
         <StyledButton
           onClick={() => setIsShown(false)}

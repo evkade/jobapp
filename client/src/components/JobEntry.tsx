@@ -16,11 +16,11 @@ const JobButtonsContainer = styled.div`
 `;
 
 const StyledJobName = styled.h2`
-  margin: 10px;
+  margin: 0 0 0 0;
 `;
 
 const StyledJobDetail = styled.p`
-  margin: 5px;
+  margin: 5px 0 5px 0;
 `;
 
 function JobEntry(props: {
