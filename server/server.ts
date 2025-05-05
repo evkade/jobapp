@@ -32,6 +32,24 @@ app.post('/newJob', (req: Request, res: Response) => {
     }
 });
 
+app.put('/jobs/:id', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const { job } = req.body;
+
+  if (!job || !id) {
+    return res.status(400).json({ message: 'Missing job data or invalid ID.' });
+  }
+
+  const existingJobIndex = jobs.findIndex(existingJob => existingJob.id === id);
+  if (existingJobIndex === -1) {
+    return res.status(404).json({ message: 'Job not found.' });
+  }
+  const updatedJob = { ...jobs[existingJobIndex], ...job };
+  jobs[existingJobIndex] = updatedJob;
+
+  res.status(200).json({ message: 'Job updated.', jobs: jobs });
+});
+
 app.delete('/jobs/:id', (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   if (!isNaN(id)) {

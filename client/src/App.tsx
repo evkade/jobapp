@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Job } from '../../shared/job.type'; 
 import Header from './components/Header';
-import JobList from './components/JobList';
+import JobList, { draftNewJob } from './components/JobList';
 import Loading from './components/Loading';
 
 import styled from 'styled-components';
-import NewJobModal from './components/NewJobModal';
+import JobDetailsModal, { JobModalType } from './components/JobModal';
 import StyledButton from './library/StyledButton';
 
 const AppContainer = styled.div`
@@ -18,7 +18,9 @@ const AppContainer = styled.div`
 function App() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [jobForUpdate, setJobForUpdate] = useState(draftNewJob);
+
 
   useEffect(() => {
     fetch('http://localhost:3001/jobs')
@@ -40,9 +42,12 @@ function App() {
   return (
     <AppContainer>
       <Header/>
-      <JobList jobs={jobs} setJobs={setJobs}/>
-      <StyledButton onClick={() => setShowModal(true)}> Add job </StyledButton>
-      <NewJobModal isShown={showModal} setIsShown={setShowModal} jobs={jobs} setJobs={setJobs} />
+      <JobList jobs={jobs} setJobs={setJobs} jobForUpdate={jobForUpdate} setJobForUpdate={setJobForUpdate}/>
+      <StyledButton onClick={() => setShowCreateModal(true)}> Add job </StyledButton>
+      <JobDetailsModal isShown={showCreateModal} setIsShown={setShowCreateModal} 
+                       jobs={jobs} setJobs={setJobs} 
+                       modalType={JobModalType.Create}
+                       jobForUpdate={jobForUpdate} setJobForUpdate={setJobForUpdate}/>
     </AppContainer>
   );
 }

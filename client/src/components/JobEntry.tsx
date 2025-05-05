@@ -8,6 +8,13 @@ const JobEntryContainer = styled.div`
     align-items: center;
 `;
 
+const JobButtonsContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+`;
+
 const StyledJobName = styled.h2`
     margin: 10px;
 `;
@@ -17,15 +24,18 @@ const StyledJobDetail = styled.p`
 `;
 
 function JobEntry(
-    props : { job : Job , deleteJob: (job: Job) => void}
+    props : { job : Job , deleteJob: (job: Job) => void, onUpdateJob: (job: Job) => void}
 ) {
-    const { job, deleteJob } = props;
+    const { job, deleteJob, onUpdateJob } = props;
     return (
         <JobEntryContainer >
             <StyledJobName>{job.name}</StyledJobName>
             <StyledJobDetail>{job.company}</StyledJobDetail>
             <StyledJobDetail>{job.location}</StyledJobDetail>
-            <StyledButton onClick={() => deleteJob(job)} bgColor='#f5d3f3' hoverColor="#dab6d8" height="25px" width="60px" fontSize="14px"> Delete </StyledButton>
+            <JobButtonsContainer>
+                <StyledButton onClick={() => onUpdateJob(job)} bgColor='#f5d3f3' hoverColor="#dab6d8" height="18px" width="50px" fontSize="12px"> Update </StyledButton>
+                <StyledButton onClick={() => deleteJob(job)} bgColor='#f5d3f3' hoverColor="#dab6d8" height="18px" width="50px" fontSize="12px"> Delete </StyledButton>
+            </JobButtonsContainer>
         </JobEntryContainer>
     )
 }
