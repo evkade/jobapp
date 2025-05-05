@@ -15,9 +15,6 @@ app.get('/', (_req: Request, res: Response) => {
     res.send('server is running!');
   });
 
-// This sets up a HTTP GET endpoint at /list-items 
-// when the browser makes a GET request to http://localhost:3001/list-items, the callback 
-// ft (req, res) => do smth runs 
 app.get('/jobs', (req: Request, res: Response) => {
     res.json({jobs: jobs});
 });
