@@ -13,6 +13,8 @@ const AppContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 30px;
+  background-color: #fdf2fc;
+  height: 100vh;
 `;
 
 function App() {

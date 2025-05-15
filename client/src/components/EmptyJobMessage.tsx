@@ -1,5 +1,3 @@
-import { Job } from "../../../shared/job.type";
-
 function EmptyJobMessage() {
   return (
     <div>
