@@ -2,8 +2,9 @@ import styled from "styled-components";
 import { Job } from "../../../shared/job.type";
 import EmptyJobMessage from "./EmptyJobMessage";
 import JobEntry from "./JobEntry";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import JobDetailsModal, { JobModalType } from "./JobModal";
+import { JobContext } from "../App";
 
 const JobListContainer = styled.div`
   display: flex;
@@ -22,12 +23,11 @@ export const draftNewJob = {
 };
 
 function JobList(props: {
-  jobs: Job[];
-  setJobs: (jobs: Job[]) => void;
   jobForUpdate: Job;
   setJobForUpdate: (job: Job) => void;
 }) {
-  const { jobs, setJobs, jobForUpdate, setJobForUpdate } = props;
+  const { jobForUpdate, setJobForUpdate } = props;
+  const {jobs, setJobs} = useContext(JobContext);
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
 
@@ -61,8 +61,6 @@ function JobList(props: {
       <JobDetailsModal
         isShown={showUpdateModal}
         setIsShown={setShowUpdateModal}
-        jobs={jobs}
-        setJobs={setJobs}
         modalType={JobModalType.Update}
         jobForUpdate={jobForUpdate}
         setJobForUpdate={setJobForUpdate}

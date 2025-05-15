@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { Job } from "../../shared/job.type";
 import Header from "./components/Header";
 import JobList, { draftNewJob } from "./components/JobList";
@@ -16,6 +16,16 @@ const AppContainer = styled.div`
   background-color: #fdf2fc;
   height: 100vh;
 `;
+
+type JobContextType = {
+  jobs: Job[];
+  setJobs: React.Dispatch<React.SetStateAction<Job[]>>;
+};
+
+export const JobContext = createContext<JobContextType>({
+  jobs: [],
+  setJobs: () => {},
+});
 
 function App() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -41,11 +51,10 @@ function App() {
   }
 
   return (
+    <JobContext.Provider value={{jobs, setJobs}}>
     <AppContainer>
       <Header />
       <JobList
-        jobs={jobs}
-        setJobs={setJobs}
         jobForUpdate={jobForUpdate}
         setJobForUpdate={setJobForUpdate}
       />
@@ -56,13 +65,12 @@ function App() {
       <JobDetailsModal
         isShown={showCreateModal}
         setIsShown={setShowCreateModal}
-        jobs={jobs}
-        setJobs={setJobs}
         modalType={JobModalType.Create}
         jobForUpdate={jobForUpdate}
         setJobForUpdate={setJobForUpdate}
       />
     </AppContainer>
+    </JobContext.Provider>
   );
 }
 

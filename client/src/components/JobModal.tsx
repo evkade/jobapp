@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { Job } from "../../../shared/job.type";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TextInput from "../library/TextInput";
 import StyledButton from "../library/StyledButton";
 import { draftNewJob } from "./JobList";
+import { JobContext } from "../App";
 
 export enum JobModalType {
   Update,
@@ -56,8 +57,6 @@ const ButtonContainer = styled.div`
 function JobDetailsModal(props: {
   isShown: boolean;
   setIsShown: (isShown: boolean) => void;
-  jobs: Job[];
-  setJobs: (jobs: Job[]) => void;
   modalType: JobModalType;
   jobForUpdate: Job;
   setJobForUpdate: (job: Job) => void;
@@ -65,12 +64,11 @@ function JobDetailsModal(props: {
   const {
     isShown,
     setIsShown,
-    jobs,
-    setJobs,
     modalType,
     jobForUpdate,
     setJobForUpdate,
   } = props;
+  const {jobs, setJobs} = useContext(JobContext);
 
   if (!isShown) {
     return null;
@@ -86,7 +84,7 @@ function JobDetailsModal(props: {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ job: job }),
+      body: JSON.stringify({ job: jobWithMetadata }),
     })
       .then((res) => {
         if (!res.ok) {
